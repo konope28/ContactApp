@@ -2,9 +2,11 @@ package com.example.homework1;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -74,7 +76,15 @@ public class ContactFragment extends Fragment implements MyContactRecyclerViewAd
     public void onItemClick(int position) {
         Bundle arguments = new Bundle();
         arguments.putInt(getString(R.string.contact_position_key), position);
-        NavHostFragment.findNavController(ContactFragment.this).navigate(R.id.action_contactFragment_to_displayContactFragment, arguments);
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            FragmentManager childFragmentManager = getChildFragmentManager();
+            DisplayContactFragment displayContactFragment = (DisplayContactFragment) childFragmentManager.findFragmentById(R.id.dispFragment);
+            displayContactFragment.displayContact(position);
+        }
+        else{
+            NavHostFragment.findNavController(ContactFragment.this).navigate(R.id.action_contactFragment_to_displayContactFragment, arguments);
+        }
+
     }
 
     @Override
